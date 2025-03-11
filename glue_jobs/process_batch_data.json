@@ -1,0 +1,670 @@
+{
+	"jobConfig": {
+		"name": "process_batch_data",
+		"description": "",
+		"role": "arn:aws:iam::864899848215:role/service-role/AWSGlueServiceRole-1",
+		"command": "glueetl",
+		"version": "5.0",
+		"runtime": null,
+		"workerType": "G.1X",
+		"numberOfWorkers": 2,
+		"maxCapacity": 2,
+		"jobRunQueuingEnabled": false,
+		"maxRetries": 0,
+		"timeout": 480,
+		"maxConcurrentRuns": 1,
+		"security": "none",
+		"scriptName": "process_batch_data.py",
+		"scriptLocation": "s3://aws-glue-assets-864899848215-us-east-1/scripts/",
+		"language": "python-3",
+		"spark": true,
+		"sparkConfiguration": "standard",
+		"jobParameters": [],
+		"tags": [],
+		"jobMode": "VISUAL_MODE",
+		"createdOn": "2025-03-04T05:44:30.994Z",
+		"developerMode": false,
+		"connectionsList": [],
+		"temporaryDirectory": "s3://aws-glue-assets-864899848215-us-east-1/temporary/",
+		"logging": true,
+		"glueHiveMetastore": true,
+		"etlAutoTuning": true,
+		"metrics": true,
+		"observabilityMetrics": true,
+		"pythonPath": "s3://aws-glue-studio-transforms-510798373988-prod-us-east-1/gs_common.py,s3://aws-glue-studio-transforms-510798373988-prod-us-east-1/gs_derived.py,s3://aws-glue-studio-transforms-510798373988-prod-us-east-1/gs_to_timestamp.py",
+		"bookmark": "job-bookmark-enable",
+		"sparkPath": "s3://aws-glue-assets-864899848215-us-east-1/sparkHistoryLogs/",
+		"flexExecution": false,
+		"minFlexWorkers": null,
+		"maintenanceWindow": null
+	},
+	"dag": {
+		"node-1741067371848": {
+			"nodeId": "node-1741067371848",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1741066904471"
+			],
+			"name": "Drop Fields",
+			"generatedNodeName": "DropFields_node1741067371848",
+			"classification": "Transform",
+			"type": "DropFields",
+			"paths": [
+				"influencer id",
+				"sentiment",
+				"campaign id",
+				"audience interests",
+				"engagement rate",
+				"post content",
+				"impressions",
+				"audience location",
+				"audience gender",
+				"audience age"
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1741066904471": {
+			"nodeId": "node-1741066904471",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [],
+			"name": "AWS Glue Data Catalog",
+			"generatedNodeName": "AWSGlueDataCatalog_node1741066904471",
+			"classification": "DataSource",
+			"type": "Catalog",
+			"isCatalog": true,
+			"database": "raw_data",
+			"table": "posts",
+			"calculatedType": "",
+			"runtimeParameters": [],
+			"codeGenVersion": 2
+		},
+		"node-1741069478696": {
+			"nodeId": "node-1741069478696",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1741069428823"
+			],
+			"name": "Derived Column",
+			"generatedNodeName": "DerivedColumn_node1741069478696",
+			"classification": "Transform",
+			"type": "DynamicTransform",
+			"parameters": [
+				{
+					"name": "colName",
+					"value": [
+						"engagement rate"
+					],
+					"isOptional": false,
+					"type": "str",
+					"listType": null
+				},
+				{
+					"name": "expr",
+					"value": [
+						"(likes + comments + shares) / reach"
+					],
+					"isOptional": false,
+					"type": "str",
+					"listType": null
+				}
+			],
+			"functionName": "gs_derived",
+			"path": "s3://aws-glue-studio-transforms-510798373988-prod-us-east-1/gs_derived.py",
+			"version": "1.0.0",
+			"transformName": "gs_derived",
+			"outputSchemas": [
+				[
+					{
+						"key": "post id",
+						"fullPath": [
+							"post id"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "platform",
+						"fullPath": [
+							"platform"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "post type",
+						"fullPath": [
+							"post type"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "post timestamp",
+						"fullPath": [
+							"post timestamp"
+						],
+						"type": "timestamp",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "likes",
+						"fullPath": [
+							"likes"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "comments",
+						"fullPath": [
+							"comments"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "shares",
+						"fullPath": [
+							"shares"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "reach",
+						"fullPath": [
+							"reach"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "engagement rate",
+						"fullPath": [
+							"engagement rate"
+						],
+						"type": "double",
+						"glueStudioType": null,
+						"children": null
+					}
+				]
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1741069785920": {
+			"nodeId": "node-1741069785920",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1741144173856"
+			],
+			"name": "Amazon S3",
+			"generatedNodeName": "AmazonS3_node1741069785920",
+			"classification": "DataSink",
+			"type": "S3",
+			"streamingBatchInterval": 100,
+			"format": "glueparquet",
+			"compression": "snappy",
+			"path": "s3://myawsbucket-dataproject/processedData/posts_processed/",
+			"partitionKeys": [],
+			"schemaChangePolicy": {
+				"enableUpdateCatalog": true,
+				"updateBehavior": "UPDATE_IN_DATABASE",
+				"database": "processed_data",
+				"table": "posts_processed"
+			},
+			"updateCatalogOptions": "schemaAndPartitions",
+			"autoDataQuality": {
+				"isEnabled": true,
+				"evaluationContext": "EvaluateDataQuality_node1741066893561"
+			},
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1741144173856": {
+			"nodeId": "node-1741144173856",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1741069478696"
+			],
+			"name": "Change Schema",
+			"generatedNodeName": "ChangeSchema_node1741144173856",
+			"classification": "Transform",
+			"type": "ApplyMapping",
+			"mapping": [
+				{
+					"toKey": "post_id",
+					"fromPath": [
+						"post id"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "platform",
+					"fromPath": [
+						"platform"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "post_type",
+					"fromPath": [
+						"post type"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "post_timestamp",
+					"fromPath": [
+						"post timestamp"
+					],
+					"toType": "timestamp",
+					"fromType": "timestamp",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "likes",
+					"fromPath": [
+						"likes"
+					],
+					"toType": "bigint",
+					"fromType": "bigint",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "comments",
+					"fromPath": [
+						"comments"
+					],
+					"toType": "bigint",
+					"fromType": "bigint",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "shares",
+					"fromPath": [
+						"shares"
+					],
+					"toType": "bigint",
+					"fromType": "bigint",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "reach",
+					"fromPath": [
+						"reach"
+					],
+					"toType": "bigint",
+					"fromType": "bigint",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "engagement_rate",
+					"fromPath": [
+						"engagement rate"
+					],
+					"toType": "double",
+					"fromType": "double",
+					"dropped": false,
+					"children": null
+				}
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1741069428823": {
+			"nodeId": "node-1741069428823",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1741069195720"
+			],
+			"name": "To Timestamp",
+			"generatedNodeName": "ToTimestamp_node1741069428823",
+			"classification": "Transform",
+			"type": "DynamicTransform",
+			"parameters": [
+				{
+					"name": "colName",
+					"value": [
+						"post timestamp"
+					],
+					"isOptional": false,
+					"type": "str",
+					"listType": null
+				},
+				{
+					"name": "colType",
+					"value": [
+						"iso"
+					],
+					"isOptional": false,
+					"type": "str",
+					"listType": null
+				}
+			],
+			"functionName": "gs_to_timestamp",
+			"path": "s3://aws-glue-studio-transforms-510798373988-prod-us-east-1/gs_to_timestamp.py",
+			"version": "1.0.0",
+			"transformName": "gs_to_timestamp",
+			"outputSchemas": [
+				[
+					{
+						"key": "post id",
+						"fullPath": [
+							"post id"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "platform",
+						"fullPath": [
+							"platform"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "post type",
+						"fullPath": [
+							"post type"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "post timestamp",
+						"fullPath": [
+							"post timestamp"
+						],
+						"type": "timestamp",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "likes",
+						"fullPath": [
+							"likes"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "comments",
+						"fullPath": [
+							"comments"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "shares",
+						"fullPath": [
+							"shares"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "reach",
+						"fullPath": [
+							"reach"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					}
+				]
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1741067833970": {
+			"nodeId": "node-1741067833970",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1741067371848"
+			],
+			"name": "Custom Transform",
+			"generatedNodeName": "CustomTransform_node1741067833970",
+			"classification": "Transform",
+			"type": "CustomCode",
+			"code": "# Get the input DynamicFrame\ndf = dfc.select(list(dfc.keys())[0]).toDF()\n\n# Define the column to move and get the rest of the columns\ncolumn_to_move = \"post id\"  # Change this to your column name\nother_columns = [col for col in df.columns if col != column_to_move]\n\n# Create the new column order with the target column at the start\nreordered_columns = [column_to_move] + other_columns\n\n# Apply the new column order\nreordered_df = df.select(*reordered_columns)\ndynamic_frame = DynamicFrame.fromDF(reordered_df, glueContext, \"reordered_df\")\n\nreturn DynamicFrameCollection({\"reordered_data\": dynamic_frame}, glueContext)\n",
+			"className": "MyTransform",
+			"outputSchemas": [
+				[
+					{
+						"key": "post id",
+						"fullPath": [
+							"post id"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "platform",
+						"fullPath": [
+							"platform"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "post type",
+						"fullPath": [
+							"post type"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "post timestamp",
+						"fullPath": [
+							"post timestamp"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "likes",
+						"fullPath": [
+							"likes"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "comments",
+						"fullPath": [
+							"comments"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "shares",
+						"fullPath": [
+							"shares"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "reach",
+						"fullPath": [
+							"reach"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					}
+				]
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1741069195720": {
+			"nodeId": "node-1741069195720",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1741069139894"
+			],
+			"name": "Change Schema",
+			"generatedNodeName": "ChangeSchema_node1741069195720",
+			"classification": "Transform",
+			"type": "ApplyMapping",
+			"mapping": [
+				{
+					"toKey": "post id",
+					"fromPath": [
+						"post id"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "platform",
+					"fromPath": [
+						"platform"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "post type",
+					"fromPath": [
+						"post type"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "post timestamp",
+					"fromPath": [
+						"post timestamp"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "likes",
+					"fromPath": [
+						"likes"
+					],
+					"toType": "long",
+					"fromType": "bigint",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "comments",
+					"fromPath": [
+						"comments"
+					],
+					"toType": "long",
+					"fromType": "bigint",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "shares",
+					"fromPath": [
+						"shares"
+					],
+					"toType": "long",
+					"fromType": "bigint",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "reach",
+					"fromPath": [
+						"reach"
+					],
+					"toType": "long",
+					"fromType": "bigint",
+					"dropped": false,
+					"children": null
+				}
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1741069139894": {
+			"nodeId": "node-1741069139894",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1741067833970"
+			],
+			"name": "Select From Collection",
+			"generatedNodeName": "SelectFromCollection_node1741069139894",
+			"classification": "Transform",
+			"type": "SelectFromCollection",
+			"index": 0,
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		}
+	},
+	"hasBeenSaved": false,
+	"usageProfileName": null
+}
