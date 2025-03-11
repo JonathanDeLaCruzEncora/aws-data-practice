@@ -1,0 +1,16 @@
+{
+  "source": ["aws.s3"],
+  "detail-type": ["Object Created"],
+  "detail": {
+    "bucket": {
+      "name": ["your-bucket-name"]
+    },
+    "object": {
+      "key": [
+        {
+          "prefix": "rawData/posts/"
+        }
+      ]
+    }
+  }
+}

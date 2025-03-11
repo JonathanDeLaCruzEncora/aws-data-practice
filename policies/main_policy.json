@@ -1,0 +1,38 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "VisualEditor0",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:BatchWriteItem",
+        "dynamodb:PutItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:Scan",
+        "dynamodb:Query",
+        "dynamodb:UpdateItem",
+        "dynamodb:UpdateTable"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "VisualEditor1",
+      "Effect": "Allow",
+      "Action": [
+        "kinesis:PutRecord",
+        "kinesis:GetShardIterator",
+        "kinesis:GetRecords",
+        "kinesis:DescribeStream",
+        "kinesis:ListStreams"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "VisualEditor2",
+      "Effect": "Allow",
+      "Action": ["s3:PutObject", "s3:GetObject"],
+      "Resource": "*"
+    }
+  ]
+}
